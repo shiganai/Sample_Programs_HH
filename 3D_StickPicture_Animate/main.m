@@ -10,3 +10,18 @@ xlim(Anime_Fig.axAnime, [min(x(:)), max(x(:))])
 ylim(Anime_Fig.axAnime, [min(y(:)), max(y(:))])
 zlim(Anime_Fig.axAnime, [min(z(:)), max(z(:))])
 grid(Anime_Fig.axAnime, 'on')
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
