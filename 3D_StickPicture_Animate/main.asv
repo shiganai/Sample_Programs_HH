@@ -1,0 +1,12 @@
+
+time = (0:1e-2:2*pi)';
+
+x = [cos(time), 1 + cos(time)];
+y = [sin(time), sin(time)];
+z = [time, time] / time(end);
+
+Anime_Fig = AnimeAn(time, x, y, z);
+xlim(Anime_Fig.axAnime, [-1, 2])
+ylim(Anime_Fig.axAnime, [-1, 1])
+zlim(Anime_Fig.axAnime, [0, 1])
+grid(Anime_Fig.axAnime, 'on')
