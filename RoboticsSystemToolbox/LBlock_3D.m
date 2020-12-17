@@ -4,12 +4,12 @@ clear all
 d_rad_tmp = 0;
 % d_rad_tmp = 5e-2;
 
-% åŸç‚¹ã‚’ä½œæˆ
-All_Bodies = rigidBodyTree('DataFormat','row'); % å¤‰æ•°ã®æƒ…å ±ã‚’æ¨ªã«ä¸¦ã¹ã‚‹ã¨ã„ã†è¨­å®šä»˜ã
+% Œ´“_‚ğì¬
+All_Bodies = rigidBodyTree('DataFormat','row'); % •Ï”‚Ìî•ñ‚ğ‰¡‚É•À‚×‚é‚Æ‚¢‚¤İ’è•t‚«
 All_Bodies.BaseName = 'Global_Origin';
 All_Bodies.Gravity = [0, 0, -9.81];
 
-% åŸç‚¹ã«è¶ç•ªé–¢ç¯€ã‚’æŒã¤ç‚¹1ã‚’ä½œæˆ
+% Œ´“_‚É’±”ÔŠÖß‚ğ‚Â“_1‚ğì¬
 Point1_revolute = rigidBody('Point1');
 joint_GO_P1O = rigidBodyJoint('joint_Global_Origin_Point1_Origin', 'revolute');
 joint_GO_P1O.JointAxis = [1,0,0];
@@ -22,7 +22,7 @@ Point1_revolute.Inertia = [0,0,0,0,0,0];
 Point1_revolute.CenterOfMass = [0,0,0];
 Point1_revolute.Joint = joint_GO_P1O;
 
-% ç‚¹1ã«è¶ç•ªé–¢ç¯€ã‚’æŒã¤ç‚¹2ã‚’ä½œæˆ
+% “_1‚É’±”ÔŠÖß‚ğ‚Â“_2‚ğì¬
 Point2_revolute = rigidBody('Point2');
 joint_P1O_P2O = rigidBodyJoint('joint_Point1_Origin_Point2_Origin', 'revolute');
 joint_P1O_P2O.JointAxis = [0,1,0];
@@ -35,20 +35,20 @@ Point2_revolute.Inertia = [0,0,0,0,0,0];
 Point2_revolute.CenterOfMass = [0,0,0];
 Point2_revolute.Joint = joint_P1O_P2O;
 
-% ç‚¹2ã«è¶ç•ªé–¢ç¯€ã‚’ã‚‚ã¤ç‚¹3ã‚’ä½œæˆ
+% “_2‚É’±”ÔŠÖß‚ğ‚à‚Â“_3‚ğì¬
 Point3_revolute = rigidBody('Point3');
-joint_P1O_S1O = rigidBodyJoint('joint_Point2_Origin_Point3_Origin', 'revolute'); % revolute ãŒè¶ç•ªã¨ã„ã†æ„å‘³, ç¬¬1å¼•æ•°ã¯åå‰
-joint_P1O_S1O.JointAxis = [0,0,1]; % è¶ç•ªè»¸ã®è¨­å®š
+joint_P1O_S1O = rigidBodyJoint('joint_Point2_Origin_Point3_Origin', 'revolute'); % revolute ‚ª’±”Ô‚Æ‚¢‚¤ˆÓ–¡, ‘æ1ˆø”‚Í–¼‘O
+joint_P1O_S1O.JointAxis = [0,0,1]; % ’±”Ô²‚Ìİ’è
 joint_P1O_S1O.HomePosition = d_rad_tmp;
 % joint_P1O_S1O.HomePosition = 1/3*pi;
-Vec_From_P1O_To_S1O = trvec2tform([0, 0 ,0]); % åŸç‚¹ã‹ã‚‰è¶ç•ªã¸ã®ä½ç½®ãƒ™ã‚¯ãƒˆãƒ«ã‚’å…¥åŠ›ã™ã‚‹, ä¸€è‡´ã™ã‚‹ãªã‚‰ [0,0,0], ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ç³»ã§è¡¨ç¤º
-setFixedTransform(joint_P1O_S1O, Vec_From_P1O_To_S1O); % joint_GO_S1O ã«ãã®ä½ç½®ãƒ™ã‚¯ãƒˆãƒ«ã‚’è¨­å®šã™ã‚‹
-Point3_revolute.Mass = 0; % è³ªé‡ 0
-Point3_revolute.Inertia = [0,0,0,0,0,0]; % æ…£æ€§ãƒ†ãƒ³ã‚½ãƒ«ã™ã¹ã¦0
-Point3_revolute.CenterOfMass = [0, 0, 0]; % é‡å¿ƒã®ä½ç½®, ã©ã“ã§ã‚‚æ§‹ã‚ãªã„ãŒã€è¶ç•ªã¨ä¸€è‡´ã•ã›ã¦ãŠã, ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ç³»ã§è¡¨ç¤º
-Point3_revolute.Joint = joint_P1O_S1O; % æ£’1 ã«Jointã‚’è¨­å®šã™ã‚‹
+Vec_From_P1O_To_S1O = trvec2tform([0, 0 ,0]); % Œ´“_‚©‚ç’±”Ô‚Ö‚ÌˆÊ’uƒxƒNƒgƒ‹‚ğ“ü—Í‚·‚é, ˆê’v‚·‚é‚È‚ç [0,0,0], ƒ[ƒJƒ‹À•WŒn‚Å•\¦
+setFixedTransform(joint_P1O_S1O, Vec_From_P1O_To_S1O); % joint_GO_S1O ‚É‚»‚ÌˆÊ’uƒxƒNƒgƒ‹‚ğİ’è‚·‚é
+Point3_revolute.Mass = 0; % ¿—Ê 0
+Point3_revolute.Inertia = [0,0,0,0,0,0]; % Šµ«ƒeƒ“ƒ\ƒ‹‚·‚×‚Ä0
+Point3_revolute.CenterOfMass = [0, 0, 0]; % dS‚ÌˆÊ’u, ‚Ç‚±‚Å‚à\‚í‚È‚¢‚ªA’±”Ô‚Æˆê’v‚³‚¹‚Ä‚¨‚­, ƒ[ƒJƒ‹À•WŒn‚Å•\¦
+Point3_revolute.Joint = joint_P1O_S1O; % –_1 ‚ÉJoint‚ğİ’è‚·‚é
 
-% ç‚¹3ã®å…ˆã«æ¥ç¶šã™ã‚‹è³ªç‚¹1ã®ä½œæˆ
+% “_3‚Ìæ‚ÉÚ‘±‚·‚é¿“_1‚Ìì¬
 MassPoint1 = rigidBody('MassPoint1');
 joint_P3O_MP1O = rigidBodyJoint('joint_Stick1_Origin_MassPoint1_Origin', 'fixed');
 Vec_From_P3O_To_MP1O = trvec2tform([0, 0 ,1]);
@@ -58,7 +58,7 @@ MassPoint1.Inertia = [0,0,0,0,0,0];
 MassPoint1.CenterOfMass = [0, 0, 0];
 MassPoint1.Joint = joint_P3O_MP1O;
 
-% è³ªç‚¹1ã®å…ˆã«æ¥ç¶šã™ã‚‹è³ªç‚¹2ã®ä½œæˆ
+% ¿“_1‚Ìæ‚ÉÚ‘±‚·‚é¿“_2‚Ìì¬
 MassPoint2 = rigidBody('MassPoint2');
 joint_MP1O_MP2O = rigidBodyJoint('joint_MassPoint1_Origin_MassPoint2_Origin', 'fixed');
 Vec_From_MP1O_To_MP2O = trvec2tform([1, 0 , 0]);
@@ -69,26 +69,26 @@ MassPoint2.CenterOfMass = [0, 0, 0];
 MassPoint2.Joint = joint_MP1O_MP2O;
 
 
-addBody(All_Bodies, Point1_revolute, 'Global_Origin') % æ£’1ã‚’åŸç‚¹ã«ã¤ãªã’ã‚‹
-addBody(All_Bodies, Point2_revolute, 'Point1') % ç‚¹2ã‚’ç‚¹1ã«ã¤ãªã’ã‚‹
-addBody(All_Bodies, Point3_revolute, 'Point2') % ç‚¹3ã‚’ç‚¹2ã«ã¤ãªã’ã‚‹
-addBody(All_Bodies, MassPoint1, 'Point3') % è³ªç‚¹1ã‚’ç‚¹3ã«ã¤ãªã’ã‚‹
-addBody(All_Bodies, MassPoint2, 'MassPoint1') % è³ªç‚¹2ã‚’è³ªç‚¹1ã«ã¤ãªã’ã‚‹
+addBody(All_Bodies, Point1_revolute, 'Global_Origin') % –_1‚ğŒ´“_‚É‚Â‚È‚°‚é
+addBody(All_Bodies, Point2_revolute, 'Point1') % “_2‚ğ“_1‚É‚Â‚È‚°‚é
+addBody(All_Bodies, Point3_revolute, 'Point2') % “_3‚ğ“_2‚É‚Â‚È‚°‚é
+addBody(All_Bodies, MassPoint1, 'Point3') % ¿“_1‚ğ“_3‚É‚Â‚È‚°‚é
+addBody(All_Bodies, MassPoint2, 'MassPoint1') % ¿“_2‚ğ¿“_1‚É‚Â‚È‚°‚é
 
-wrench = [0, 0, 0, 0, 0, 0]; % è³ªç‚¹1ã«ä½œç”¨ã•ã›ã‚‹(æ­£ç¢ºã«ã¯è³ªç‚¹1ã®ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™åŸç‚¹, æ–¹å‘ã‚‚ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ç³»ã§è¡¨ã•ã‚Œã‚‹)ã«ä½œç”¨ã•ã›ã‚‹åŠ›ãƒ™ã‚¯ãƒˆãƒ« [Tx Ty Tz Fx Fy Fz]
+wrench = [0, 0, 0, 0, 0, 0]; % ¿“_1‚Éì—p‚³‚¹‚é(³Šm‚É‚Í¿“_1‚Ìƒ[ƒJƒ‹À•WŒ´“_, •ûŒü‚àƒ[ƒJƒ‹À•WŒn‚Å•\‚³‚ê‚é)‚Éì—p‚³‚¹‚é—ÍƒxƒNƒgƒ‹ [Tx Ty Tz Fx Fy Fz]
 
-HomeConfig = homeConfiguration(All_Bodies); % ãƒ›ãƒ¼ãƒ ãƒã‚¸ã‚·ãƒ§ãƒ³ã®ç²å¾—, joint_GO_S1O.HomePosition = 1/4*pi; ã®ãŠã‹ã’ã§ 1/4*pi å‡ºåŠ›ã•ã‚Œã‚‹, ä»–ã«ã‚‚å¤‰æ•°ãŒã£ãŸå ´åˆ [å¤‰æ•°1, å¤‰æ•°2. ...] ã¨åˆ—ãƒ™ã‚¯ãƒˆãƒ«ã§å‡ºåŠ›ã•ã‚Œã‚‹
+HomeConfig = homeConfiguration(All_Bodies); % ƒz[ƒ€ƒ|ƒWƒVƒ‡ƒ“‚ÌŠl“¾, joint_GO_S1O.HomePosition = 1/4*pi; ‚Ì‚¨‚©‚°‚Å 1/4*pi o—Í‚³‚ê‚é, ‘¼‚É‚à•Ï”‚ª‚Á‚½ê‡ [•Ï”1, •Ï”2. ...] ‚Æ—ñƒxƒNƒgƒ‹‚Åo—Í‚³‚ê‚é
 VariableNum = size(HomeConfig,2);
-fext = externalForce(All_Bodies, 'MassPoint1', wrench, HomeConfig); % qã®è¡¨ã™çŠ¶æ…‹ã§, è³ªç‚¹1ã«ä½œç”¨ã•ã›ã‚‹ã¨ã„ã†å®£è¨€
+fext = externalForce(All_Bodies, 'MassPoint1', wrench, HomeConfig); % q‚Ì•\‚·ó‘Ô‚Å, ¿“_1‚Éì—p‚³‚¹‚é‚Æ‚¢‚¤éŒ¾
 
-G_Position = centerOfMass(All_Bodies, HomeConfig) % é‡å¿ƒã®ç²å¾—
+G_Position = centerOfMass(All_Bodies, HomeConfig) % dS‚ÌŠl“¾
 figure(1)
-show(All_Bodies, 'PreservePlot', false); % çµ¶å¯¾åº§æ¨™ç³»ã€ãƒ­ãƒ¼ã‚«ãƒ«åº§æ¨™ç³»ã‚’ãã‚Œãã‚Œãƒ—ãƒ­ãƒƒãƒˆã—ã¦ãã‚Œã‚‹
+show(All_Bodies, 'PreservePlot', false); % â‘ÎÀ•WŒnAƒ[ƒJƒ‹À•WŒn‚ğ‚»‚ê‚¼‚êƒvƒƒbƒg‚µ‚Ä‚­‚ê‚é
 view(2)
 hold on
-plot3(G_Position(1), G_Position(2), G_Position(3), 'or') % é‡å¿ƒã®ãƒ—ãƒ­ãƒƒãƒˆ
+plot3(G_Position(1), G_Position(2), G_Position(3), 'or') % dS‚Ìƒvƒƒbƒg
 hold off
-qddot = forwardDynamics(All_Bodies, HomeConfig, [], [], fext) % figure(1)ã«è¡¨ç¤ºã•ã‚Œã¦ã„ã‚‹çŠ¶æ…‹ã§ã® åŠ é€Ÿåº¦
+qddot = forwardDynamics(All_Bodies, HomeConfig, [], [], fext) % figure(1)‚É•\¦‚³‚ê‚Ä‚¢‚éó‘Ô‚Å‚Ì ‰Á‘¬“x
 
 % P_MP1_tmp = (getTransform(Global_Origin, HomeConfig, 'MassPoint1', 'base') * ([0, 0, 0, 1])')'
 % P_MP2_tmp = (getTransform(Global_Origin, HomeConfig, 'MassPoint2', 'base') * ([0, 0, 0, 1])')'
@@ -146,47 +146,3 @@ for ii = 1:size(time)
     pause(0.2)
 end
 %}
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
