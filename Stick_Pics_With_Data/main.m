@@ -83,6 +83,7 @@ Stick_Pics_Legend_Labels = {'Pendulum1', 'Pendulum2', 'Pendulum3'};
 X = time;
 Y = theta_1;
 
+figure
 Plot_With_Stick_Pics(X, Y, Stick_Pics_X, Stick_Pics_Data_X, Stick_Pics_Data_Y, XTick_For_One_Stick_Pics, Stick_Pics_Width, Stick_Pics_Height, Stick_Pics_Legend_Labels)
 
 

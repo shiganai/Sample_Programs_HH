@@ -105,6 +105,26 @@ end
 % ここで表示されている y軸の大きさと軸の Position プロパティが一致しなくなる
 daspect([1, 1, 1])
 
+% スティックピクチャの位置と主データの横軸の位置が合うように Position を調整
+ax_Stick.Position(1) = ax_Data.Position(1) + ax_Data.Position(3) * ax_Stick.XLim(1) / ax_Stick_XLim_Range;
+ax_Stick.Position(3) = ax_Data.Position(3) * diff(ax_Stick.XLim) / ax_Stick_XLim_Range;
+
+fig_tmp = gcf;
+
+% ax_Stick.Positionなどは figure の Position に対しての比率(0～1)で決まっているため，横の相対長さから縦の相対長さを求めるのが少しややこしい
+% ax_Stick.Position(3) * diff(ax_Stick.YLim) / diff(ax_Stick.XLim) で縦軸の，figureの横の長さに対する相対長さが求まる
+% それにfigureの横の長さをかけて，絶対長さを得る
+% それをfigureの縦の長さで割って，figureの縦の長さに対する相対長さを得る．
+ax_Stick.Position(4) = ax_Stick.Position(3) * diff(ax_Stick.YLim) / diff(ax_Stick.XLim) * fig_tmp.Position(3) / fig_tmp.Position(4);
+
+% figure の上端にスティックピクチャ用の座標の上端が一致するようにスティックピクチャ用の座標の下端を設定
+ax_Stick.Position(2) = 1 - ax_Stick.Position(4);
+
+% スティックピクチャ用の座標の上端に主データ用の座標の上端が一致するように主データ用の座標の高さを設定
+ax_Data.Position(4) = ax_Stick.Position(2) - ax_Data.Position(2) - ax_Data.TightInset(4);
+
+% 絶対長さですべて設定する場合．計算は追いやすいが，新しいfigureに対しては失敗する
+%{
 fig_tmp = gcf;
 % figure の Position の単位を pixels に設定
 fig_tmp.Units = 'pixels';
@@ -126,6 +146,7 @@ ax_Stick.Position(2) = (fig_tmp.Position(2) + fig_tmp.Position(4)) - ax_Stick.Po
 
 % スティックピクチャ用の座標の上端に主データ用の座標の上端が一致するように主データ用の座標の高さを設定
 ax_Data.Position(4) = ax_Stick.Position(2) - ax_Data.Position(2) - ax_Data.TightInset(4);
+%}
 
 end
 
