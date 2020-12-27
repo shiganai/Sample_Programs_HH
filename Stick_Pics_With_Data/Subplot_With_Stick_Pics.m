@@ -217,8 +217,13 @@ ax_Subplot_OuterPosition_4 = (ax_Stick.Position(2) - ax_BackGround.Position(2))/
 
 % 一つ一つ位置を設定していく．大枠が接するようにする．座標系を接させると，目盛りが重なってしまったりする
 for Subplot_Index = 1:Subplot_Num
+    % なぜか縦の設定が横幅をずらす事象が確認された．だから強制的に戻す
+    Position_1_3_log = ax_Subplot(Subplot_Index, 1).Position([1,3]);
+    
     ax_Subplot(Subplot_Index, 1).OuterPosition(4) = ax_Subplot_OuterPosition_4;
     ax_Subplot(Subplot_Index, 1).OuterPosition(2) = ax_Stick.Position(2) - ax_Subplot_OuterPosition_4 * Subplot_Index;
+    
+    ax_Subplot(Subplot_Index, 1).Position([1,3]) = Position_1_3_log;
 end
 
 % x軸を各座標の一番下に置く場合，Subplotの一番下のx軸は背景のx軸で塗り替える
