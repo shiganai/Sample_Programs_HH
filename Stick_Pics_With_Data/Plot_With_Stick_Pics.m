@@ -112,7 +112,11 @@ if (ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0) && (ax_Stick.XLim(2) / ax_Stick_
 elseif ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0
     ax_Data.Position(1) = max([-ax_Stick.XLim(1) / diff(ax_Stick.XLim), ...
         ax_Data.OuterPosition(1) + ax_Data.TightInset(1)]);
+    
+    ax_Data.Position(3) = 1 - ax_Data.Position(1) - ax_Data.TightInset(3);
 elseif ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
+    ax_Data.Position(1) = ax_Data.OuterPosition(1) + ax_Data.TightInset(1);
+    
     ax_Data.Position(3) = (1 - ax_Data.Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
 end
 

@@ -101,6 +101,25 @@ ax_Stick.YColor = 'none';
 % 透明化
 ax_Stick.Color = 'none';
 
+% Grid を載せるための全体の背景座標を設定
+ax_BackGround = axes;
+
+% 他の座標たちを最前面に
+for Subplot_Index = 1:Subplot_Num
+    axes(ax_Subplot(Subplot_Index, 1))
+end
+axes(ax_Stick)
+
+% 透明化
+ax_BackGround.YColor = 'none';
+
+% 軸合わせ
+xlim(ax_BackGround, ax_Subplot(end, 1).XLim)
+
+% タイトル，xlabel挿入
+title(ax_BackGround, Title_Str);
+xlabel(ax_BackGround, XLabel_Str);
+
 % もしスティックピクチャが主データの右端と左端に設定されているなら，スティックピクチャ用の座標が横いっぱいになるようにする
 % もしスティックピクチャの左端だけ飛び出すなら，主データの大きさをそのままに，主データの位置を動かす
 % もしスティックピクチャの右端だけ飛び出すなら，主データの大きさを少し縮小する.
@@ -125,10 +144,19 @@ elseif ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0
     
     for Subplot_Index = 1:Subplot_Num
         ax_Subplot(Subplot_Index, 1).Position(1) = ax_Subplot_Position_1;
+        
+        ax_Subplot(Subplot_Index, 1).Position(3) = 1 - ax_Subplot(Subplot_Index, 1).Position(1) - ax_BackGround.TightInset(3);
     end
     
 elseif ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
+    
+    ax_Subplot_Position_1 = -Inf;
     for Subplot_Index = 1:Subplot_Num
+        ax_Subplot_Position_1 = max([ax_Subplot_Position_1, ax_Subplot(Subplot_Index, 1).OuterPosition(1) + ax_Subplot(Subplot_Index, 1).TightInset(1)]);
+    end
+    
+    for Subplot_Index = 1:Subplot_Num
+        ax_Subplot(Subplot_Index, 1).Position(1) = ax_Subplot_Position_1;
         ax_Subplot(Subplot_Index, 1).Position(3) = (1 - ax_Subplot(Subplot_Index, 1).Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
     end
 end
@@ -140,25 +168,6 @@ daspect([1, 1, 1])
 % スティックピクチャの位置と主データの横軸の位置が合うように Position を調整
 ax_Stick.Position(1) = ax_Subplot_Top.Position(1) + ax_Subplot_Top.Position(3) * ax_Stick.XLim(1) / ax_Stick_XLim_Range;
 ax_Stick.Position(3) = ax_Subplot_Top.Position(3) * diff(ax_Stick.XLim) / ax_Stick_XLim_Range;
-
-% Grid を載せるための全体の背景座標を設定
-ax_BackGround = axes;
-
-% 他の座標たちを最前面に
-for Subplot_Index = 1:Subplot_Num
-    axes(ax_Subplot(Subplot_Index, 1))
-end
-axes(ax_Stick)
-
-% 透明化
-ax_BackGround.YColor = 'none';
-
-% 軸合わせ
-xlim(ax_BackGround, ax_Subplot(end, 1).XLim)
-
-% タイトル，xlabel挿入
-title(ax_BackGround, Title_Str);
-xlabel(ax_BackGround, XLabel_Str);
 
 % グリッド線の追加
 alpha_Value = 0.2;
@@ -196,7 +205,6 @@ ax_Subplot_OuterPosition_4 = (ax_Stick.Position(2) - ax_BackGround.Position(2))/
 for Subplot_Index = 1:Subplot_Num
     ax_Subplot(Subplot_Index, 1).OuterPosition(4) = ax_Subplot_OuterPosition_4;
     ax_Subplot(Subplot_Index, 1).OuterPosition(2) = ax_Stick.Position(2) - ax_Subplot_OuterPosition_4 * Subplot_Index;
-    legend(ax_Subplot(Subplot_Index, 1), Legend_Labels, 'Location', 'best')
 end
 
 % x軸を各座標の一番下に置く場合，Subplotの一番下のx軸は背景のx軸で塗り替える
@@ -206,6 +214,9 @@ if isequal(XAxisLocation, 'bottom')
     ax_BackGround.Position(2) = ax_Subplot(end,1).Position(2);
 end
 
+for Subplot_Index = 1:Subplot_Num
+    legend(ax_Subplot(Subplot_Index, 1), Legend_Labels, 'Location', 'best')
+end
 end
 
 
