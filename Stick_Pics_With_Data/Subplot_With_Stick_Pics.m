@@ -33,7 +33,8 @@ for Subplot_Index = 1:Subplot_Num
 
 end
 
-ax_Subplot_Top = ax_Subplot(1, 1);
+ax_Subplot_Top = ax_Subplot(1,1);
+ax_Subplot_Bottom = ax_Subplot(end,1);
 
 ax_Stick = axes('Position', ax_Subplot_Top.Position);
 
@@ -117,7 +118,7 @@ axes(ax_Stick)
 ax_BackGround.YColor = 'none';
 
 % 軸合わせ
-xlim(ax_BackGround, ax_Subplot(end, 1).XLim)
+xlim(ax_BackGround, ax_Subplot_Bottom.XLim)
 
 % タイトル，xlabel挿入
 title(ax_BackGround, Title_Str);
@@ -192,7 +193,7 @@ for Stick_Pics_X_All_Index = 1:size(Stick_Pics_X_All,1)
 end
 
 % 横合わせ
-ax_BackGround.Position([1,3]) = [ax_Subplot(end, 1).Position(1), ax_Subplot(end, 1).Position(3)];
+ax_BackGround.Position([1,3]) = [ax_Subplot_Bottom.Position(1), ax_Subplot_Bottom.Position(3)];
 
 
 % 縦合わせ
@@ -228,9 +229,21 @@ end
 
 % x軸を各座標の一番下に置く場合，Subplotの一番下のx軸は背景のx軸で塗り替える
 if isequal(XAxisLocation, 'bottom')
-    ax_Subplot(end,1).XColor = 'none';
-    ax_BackGround.Position(4) = ax_BackGround.Position(4) - (ax_Subplot(end,1).Position(2) - ax_BackGround.Position(2));
-    ax_BackGround.Position(2) = ax_Subplot(end,1).Position(2);
+    ax_Subplot_Bottom.XColor = 'none';
+    
+    Height_Ratio = (ax_BackGround.Position(2) + ax_BackGround.Position(4) - ax_BackGround.Position(2)) ...
+        / (ax_BackGround.Position(2) + ax_BackGround.Position(4) - (ax_Subplot_Bottom.Position(2) + ax_Subplot_Bottom.TightInset(2)));
+    ax_Subplot_OuterPosition_4 = ax_Subplot_OuterPosition_4 * Height_Ratio;
+    
+    for Subplot_Index = 1:Subplot_Num
+        Position_1_3_log = ax_Subplot(Subplot_Index, 1).Position([1,3]);
+        
+        ax_Subplot(Subplot_Index, 1).OuterPosition(4) = ax_Subplot_OuterPosition_4;
+        ax_Subplot(Subplot_Index, 1).OuterPosition(2) = ax_Stick.Position(2) - ax_Subplot_OuterPosition_4 * Subplot_Index;
+        
+        ax_Subplot(Subplot_Index, 1).Position([1,3]) = Position_1_3_log;
+        
+    end
 end
 
 for Subplot_Index = 1:Subplot_Num
