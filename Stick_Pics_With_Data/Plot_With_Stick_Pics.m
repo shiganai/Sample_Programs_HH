@@ -100,11 +100,6 @@ for Stick_Pics_X_All_Index = 1:size(Stick_Pics_X_All, 1)
     end
 end
 
-% 一番右端のスティックピクチャの右端が主データの横軸の上端より大きかった場合，主データの横軸を少し縮小する
-% if ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
-%     ax_Data.Position(3) = (1 - ax_Data.Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
-% end
-
 % もしスティックピクチャが主データの右端と左端に設定されているなら，スティックピクチャ用の座標が横いっぱいになるようにする
 % もしスティックピクチャの左端だけ飛び出すなら，主データの大きさをそのままに，主データの位置を動かす
 % もしスティックピクチャの右端だけ飛び出すなら，主データの大きさを少し縮小する.

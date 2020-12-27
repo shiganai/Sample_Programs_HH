@@ -87,7 +87,6 @@ end
 
 % 一番左端のスティックピクチャの左端がギリギリ入るようにスティックピクチャ用の座標のx軸の下端を設定
 ax_Stick.XLim(1) = Texts_Left;
-% ax_Stick.XLim(1) = ax_Stick_XLim_Range * (Stick_Pics_X_All(1) - ax_Subplot_Top.XLim(1)) / (ax_Subplot_Top.XLim(2) - ax_Subplot_Top.XLim(1)) - Stick_Pics_Width/2;
 
 % 一番右端のスティックピクチャの右端がギリギリ入るようにスティックピクチャ用の座標のx軸の上端を設定
 ax_Stick.XLim(2) = ax_Stick_XLim_Range * (Stick_Pics_X_All(end) - ax_Subplot_Top.XLim(1)) / (ax_Subplot_Top.XLim(2) - ax_Subplot_Top.XLim(1)) + Stick_Pics_Width/2;
@@ -102,14 +101,6 @@ ax_Stick.YColor = 'none';
 % 透明化
 ax_Stick.Color = 'none';
 
-% Subplotたちの横幅を調整する
-% 一番右端のスティックピクチャの右端が主データの横軸の上端より大きかった場合，主データの横軸を少し縮小する
-% if ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
-%     for Subplot_Index = 1:Subplot_Num
-%         ax_Subplot(Subplot_Index, 1).Position(3) = (1 - ax_Subplot_Top.Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
-%     end
-% end
-
 % もしスティックピクチャが主データの右端と左端に設定されているなら，スティックピクチャ用の座標が横いっぱいになるようにする
 % もしスティックピクチャの左端だけ飛び出すなら，主データの大きさをそのままに，主データの位置を動かす
 % もしスティックピクチャの右端だけ飛び出すなら，主データの大きさを少し縮小する.
@@ -122,11 +113,9 @@ if (ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0) && (ax_Stick.XLim(2) / ax_Stick_
     
     for Subplot_Index = 1:Subplot_Num
         ax_Subplot(Subplot_Index, 1).Position(1) = ax_Subplot_Position_1;
-%         ax_Subplot(Subplot_Index, 1).Position(1) = max([-ax_Stick.XLim(1) / diff(ax_Stick.XLim), ...
-%             ax_Subplot(Subplot_Index, 1).OuterPosition(1) + ax_Subplot(Subplot_Index, 1).TightInset(1)]);
-        
         ax_Subplot(Subplot_Index, 1).Position(3) = (1 - ax_Subplot(Subplot_Index, 1).Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
     end
+    
 elseif ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0
     
     ax_Subplot_Position_1 = -ax_Stick.XLim(1) / diff(ax_Stick.XLim);
@@ -136,9 +125,8 @@ elseif ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0
     
     for Subplot_Index = 1:Subplot_Num
         ax_Subplot(Subplot_Index, 1).Position(1) = ax_Subplot_Position_1;
-%         ax_Subplot(Subplot_Index, 1).Position(1) = max([-ax_Stick.XLim(1) / diff(ax_Stick.XLim), ...
-%             ax_Subplot(Subplot_Index, 1).OuterPosition(1) + ax_Subplot(Subplot_Index, 1).TightInset(1)]);
     end
+    
 elseif ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
     for Subplot_Index = 1:Subplot_Num
         ax_Subplot(Subplot_Index, 1).Position(3) = (1 - ax_Subplot(Subplot_Index, 1).Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
