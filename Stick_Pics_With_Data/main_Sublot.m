@@ -58,15 +58,15 @@ Stick_Pics_Width = 4;
 Stick_Pics_Height = 4;
 
 % スティックピクチャの説明
-% Stick_Pics_Legend_Labels = {'Pendulum1'};
-Stick_Pics_Legend_Labels = {'Pendulum1'
-    'Pendulum2'
-    'Pendulum3'};
+Stick_Pics_Legend_Labels = {
+    '場合1'
+    '場合2'
+    '場合3'};
 
 XLabel_Str = '時間';
 YLabel_Str = {
     '\theta_1'
-    '\theta_2'
+    {'\theta_2', '改行もできる'}
     };
 Title_Str = '角度[rad]';
 Legend_Labels = {

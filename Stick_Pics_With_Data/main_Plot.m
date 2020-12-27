@@ -1,7 +1,7 @@
 
 time = (0:1e-2:10)';
 
-theta_1 = [time * 1/10 * 2*pi, time * 1/5 * 2*pi, time * 1/10 * 2*pi];
+theta_1 = [time * 1/10 * 2*pi, time * 1/5 * 2*pi - 2*pi, time * 1/7 * 2*pi];
 
 theta_2 = [time * 1/10 * 2*pi, time * 1/5 * 2*pi, time * 1/5 * 2*pi];
 % theta_2 =  2*pi - time * 1/10 * 2*pi;
@@ -79,13 +79,25 @@ Stick_Pics_Height = 4;
 
 % スティックピクチャの説明
 % Stick_Pics_Legend_Labels = {'Pendulum1'};
-Stick_Pics_Legend_Labels = {'Pendulum1', 'Pendulum2', 'Pendulum3'};
+Stick_Pics_Legend_Labels = {
+    '場合1'
+    '場合2'
+    '場合3'};
 
 X = time;
 Y = theta_1;
 
+XLabel_Str = '時間';
+YLabel_Str = {'\theta_1', '改行もできる'};
+Title_Str = 'main\_Plot';
+Legend_Labels = {
+    '場合1'
+    '場合2'
+    '場合3'
+    };
+
 figure(1)
-Plot_With_Stick_Pics(X, Y, ...
+Plot_With_Stick_Pics(X, Y, XLabel_Str, YLabel_Str, Title_Str, Legend_Labels, ...
     Stick_Pics_X, Stick_Pics_Data_X, Stick_Pics_Data_Y, Stick_Pics_Legend_Labels, XTick_For_One_Stick_Pics, Stick_Pics_Width, Stick_Pics_Height)
 
 
