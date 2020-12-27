@@ -231,19 +231,8 @@ end
 if isequal(XAxisLocation, 'bottom')
     ax_Subplot_Bottom.XColor = 'none';
     
-    Height_Ratio = (ax_BackGround.Position(2) + ax_BackGround.Position(4) - ax_BackGround.Position(2)) ...
-        / (ax_BackGround.Position(2) + ax_BackGround.Position(4) - (ax_Subplot_Bottom.Position(2) + ax_Subplot_Bottom.TightInset(2)));
-    ax_Subplot_OuterPosition_4 = ax_Subplot_OuterPosition_4 * Height_Ratio;
-    
-    for Subplot_Index = 1:Subplot_Num
-        Position_1_3_log = ax_Subplot(Subplot_Index, 1).Position([1,3]);
-        
-        ax_Subplot(Subplot_Index, 1).OuterPosition(4) = ax_Subplot_OuterPosition_4;
-        ax_Subplot(Subplot_Index, 1).OuterPosition(2) = ax_Stick.Position(2) - ax_Subplot_OuterPosition_4 * Subplot_Index;
-        
-        ax_Subplot(Subplot_Index, 1).Position([1,3]) = Position_1_3_log;
-        
-    end
+    ax_Subplot_Bottom.Position(4) = ax_Subplot_Bottom.Position(4) + (ax_Subplot_Bottom.Position(2) - ax_BackGround.Position(2));
+    ax_Subplot_Bottom.Position(2) = ax_BackGround.Position(2);
 end
 
 for Subplot_Index = 1:Subplot_Num

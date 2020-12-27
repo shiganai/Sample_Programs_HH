@@ -74,8 +74,8 @@ Legend_Labels = {
     '場合2'
     '場合3'
     };
-XAxisLocation = 'origin';
-% XAxisLocation = 'bottom';
+% XAxisLocation = 'origin';
+XAxisLocation = 'bottom';
 
 X = time;
 Y = {
