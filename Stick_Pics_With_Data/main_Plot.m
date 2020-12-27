@@ -23,7 +23,7 @@ Stick_Pics_X{1} = [
     7
     8
     9
-    10
+%     10
     ];
 Stick_Pics_X{2} = [
 %     0
@@ -36,7 +36,7 @@ Stick_Pics_X{2} = [
     7
     8
     9
-    10
+%     10
     ];
 Stick_Pics_X{3} = [
     3
