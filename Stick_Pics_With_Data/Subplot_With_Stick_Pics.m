@@ -78,10 +78,16 @@ Stick_Pics_X_All = sort(unique(Stick_Pics_X_All));
 Stick_Pics_Legend_Index = 1:size(Stick_Pics_Legend_Labels(:), 1);
 Text_X(Stick_Pics_Legend_Index) = ax_Stick_XLim_Range * (Stick_Pics_X_All(1) - ax_Subplot_Top.XLim(1)) / diff(ax_Subplot_Top.XLim) - Stick_Pics_Width/2;
 Text_Y = -Stick_Pics_Height_Base_Top - Stick_Pics_Height * (Stick_Pics_Legend_Index - 1);
-text(Text_X, Text_Y, Stick_Pics_Legend_Labels, 'HorizontalAlignment', 'right')
+Texts = text(Text_X, Text_Y, Stick_Pics_Legend_Labels, 'HorizontalAlignment', 'right');
+
+Texts_Left = Inf;
+for Texts_Index = 1:size(Texts,1)
+    Texts_Left = min([Texts_Left, Texts(Texts_Index).Extent(1)]);
+end
 
 % 一番左端のスティックピクチャの左端がギリギリ入るようにスティックピクチャ用の座標のx軸の下端を設定
-ax_Stick.XLim(1) = ax_Stick_XLim_Range * (Stick_Pics_X_All(1) - ax_Subplot_Top.XLim(1)) / (ax_Subplot_Top.XLim(2) - ax_Subplot_Top.XLim(1)) - Stick_Pics_Width/2;
+ax_Stick.XLim(1) = Texts_Left;
+% ax_Stick.XLim(1) = ax_Stick_XLim_Range * (Stick_Pics_X_All(1) - ax_Subplot_Top.XLim(1)) / (ax_Subplot_Top.XLim(2) - ax_Subplot_Top.XLim(1)) - Stick_Pics_Width/2;
 
 % 一番右端のスティックピクチャの右端がギリギリ入るようにスティックピクチャ用の座標のx軸の上端を設定
 ax_Stick.XLim(2) = ax_Stick_XLim_Range * (Stick_Pics_X_All(end) - ax_Subplot_Top.XLim(1)) / (ax_Subplot_Top.XLim(2) - ax_Subplot_Top.XLim(1)) + Stick_Pics_Width/2;
@@ -98,12 +104,45 @@ ax_Stick.Color = 'none';
 
 % Subplotたちの横幅を調整する
 % 一番右端のスティックピクチャの右端が主データの横軸の上端より大きかった場合，主データの横軸を少し縮小する
-if ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
-    for Subplot_Index = 1:Subplot_Num
-        ax_Subplot(Subplot_Index, 1).Position(3) = (1 - ax_Subplot_Top.Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
-    end
-else
+% if ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
+%     for Subplot_Index = 1:Subplot_Num
+%         ax_Subplot(Subplot_Index, 1).Position(3) = (1 - ax_Subplot_Top.Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
+%     end
+% end
+
+% もしスティックピクチャが主データの右端と左端に設定されているなら，スティックピクチャ用の座標が横いっぱいになるようにする
+% もしスティックピクチャの左端だけ飛び出すなら，主データの大きさをそのままに，主データの位置を動かす
+% もしスティックピクチャの右端だけ飛び出すなら，主データの大きさを少し縮小する.
+if (ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0) && (ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1)
     
+    ax_Subplot_Position_1 = -ax_Stick.XLim(1) / diff(ax_Stick.XLim);
+    for Subplot_Index = 1:Subplot_Num
+        ax_Subplot_Position_1 = max([ax_Subplot_Position_1, ax_Subplot(Subplot_Index, 1).OuterPosition(1) + ax_Subplot(Subplot_Index, 1).TightInset(1)]);
+    end
+    
+    for Subplot_Index = 1:Subplot_Num
+        ax_Subplot(Subplot_Index, 1).Position(1) = ax_Subplot_Position_1;
+%         ax_Subplot(Subplot_Index, 1).Position(1) = max([-ax_Stick.XLim(1) / diff(ax_Stick.XLim), ...
+%             ax_Subplot(Subplot_Index, 1).OuterPosition(1) + ax_Subplot(Subplot_Index, 1).TightInset(1)]);
+        
+        ax_Subplot(Subplot_Index, 1).Position(3) = (1 - ax_Subplot(Subplot_Index, 1).Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
+    end
+elseif ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0
+    
+    ax_Subplot_Position_1 = -ax_Stick.XLim(1) / diff(ax_Stick.XLim);
+    for Subplot_Index = 1:Subplot_Num
+        ax_Subplot_Position_1 = max([ax_Subplot_Position_1, ax_Subplot(Subplot_Index, 1).OuterPosition(1) + ax_Subplot(Subplot_Index, 1).TightInset(1)]);
+    end
+    
+    for Subplot_Index = 1:Subplot_Num
+        ax_Subplot(Subplot_Index, 1).Position(1) = ax_Subplot_Position_1;
+%         ax_Subplot(Subplot_Index, 1).Position(1) = max([-ax_Stick.XLim(1) / diff(ax_Stick.XLim), ...
+%             ax_Subplot(Subplot_Index, 1).OuterPosition(1) + ax_Subplot(Subplot_Index, 1).TightInset(1)]);
+    end
+elseif ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
+    for Subplot_Index = 1:Subplot_Num
+        ax_Subplot(Subplot_Index, 1).Position(3) = (1 - ax_Subplot(Subplot_Index, 1).Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
+    end
 end
 
 % x軸，y軸のデータを同じ長さで表示する．例えば円がちゃんと円として表示されるようになる

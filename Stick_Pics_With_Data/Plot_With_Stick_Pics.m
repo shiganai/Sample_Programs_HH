@@ -64,7 +64,12 @@ Stick_Pics_X_All = sort(unique(Stick_Pics_X_All));
 Stick_Pics_Legend_Index = 1:size(Stick_Pics_Legend_Labels(:), 1);
 Text_X(Stick_Pics_Legend_Index) = ax_Stick_XLim_Range * (Stick_Pics_X_All(1) - ax_Data.XLim(1)) / diff(ax_Data.XLim) - Stick_Pics_Width/2;
 Text_Y = -Stick_Pics_Height_Base_Top - Stick_Pics_Height * (Stick_Pics_Legend_Index - 1);
-text(Text_X, Text_Y, Stick_Pics_Legend_Labels, 'HorizontalAlignment', 'right')
+Texts = text(Text_X, Text_Y, Stick_Pics_Legend_Labels, 'HorizontalAlignment', 'right');
+
+Texts_Left = Inf;
+for Texts_Index = 1:size(Texts,1)
+    Texts_Left = min([Texts_Left, Texts(Texts_Index).Extent(1)]);
+end
 
 % スティックピクチャ用の座標にスティックピクチャを置いた場所のx軸の目盛りを追加
 xticks(ax_Stick_XLim_Range * (Stick_Pics_X_All - ax_Data.XLim(1)) / diff(ax_Data.XLim))
@@ -72,8 +77,8 @@ xticks(ax_Stick_XLim_Range * (Stick_Pics_X_All - ax_Data.XLim(1)) / diff(ax_Data
 % スティックピクチャ用の座標のx軸だけGrid on
 ax_Stick.XGrid = 'on';
 
-% 一番左端のスティックピクチャの左端がギリギリ入るようにスティックピクチャ用の座標のx軸の下端を設定
-ax_Stick.XLim(1) = ax_Stick_XLim_Range * (Stick_Pics_X_All(1) - ax_Data.XLim(1)) / (ax_Data.XLim(2) - ax_Data.XLim(1)) - Stick_Pics_Width/2 - Stick_Pics_Width;
+% スティックピクチャの凡例がギリギリ入るようにスティックピクチャ用の座標のx軸の下端を設定
+ax_Stick.XLim(1) = Texts_Left;
 
 % 一番右端のスティックピクチャの右端がギリギリ入るようにスティックピクチャ用の座標のx軸の上端を設定
 ax_Stick.XLim(2) = ax_Stick_XLim_Range * (Stick_Pics_X_All(end) - ax_Data.XLim(1)) / (ax_Data.XLim(2) - ax_Data.XLim(1)) + Stick_Pics_Width/2;
@@ -96,10 +101,24 @@ for Stick_Pics_X_All_Index = 1:size(Stick_Pics_X_All, 1)
 end
 
 % 一番右端のスティックピクチャの右端が主データの横軸の上端より大きかった場合，主データの横軸を少し縮小する
-if ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
-    ax_Data.Position(3) = (1 - ax_Data.Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
-else
+% if ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
+%     ax_Data.Position(3) = (1 - ax_Data.Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
+% end
+
+% もしスティックピクチャが主データの右端と左端に設定されているなら，スティックピクチャ用の座標が横いっぱいになるようにする
+% もしスティックピクチャの左端だけ飛び出すなら，主データの大きさをそのままに，主データの位置を動かす
+% もしスティックピクチャの右端だけ飛び出すなら，主データの大きさを少し縮小する.
+if (ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0) && (ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1)
+    ax_Data.Position(1) = max([-ax_Stick.XLim(1) / diff(ax_Stick.XLim), ...
+        ax_Data.OuterPosition(1) + ax_Data.TightInset(1)]);
     
+    ax_Data.Position(3) = (1 - ax_Data.Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
+    
+elseif ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0
+    ax_Data.Position(1) = max([-ax_Stick.XLim(1) / diff(ax_Stick.XLim), ...
+        ax_Data.OuterPosition(1) + ax_Data.TightInset(1)]);
+elseif ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
+    ax_Data.Position(3) = (1 - ax_Data.Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
 end
 
 % x軸，y軸のデータを同じ長さで表示する．例えば円がちゃんと円として表示されるようになる
