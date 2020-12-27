@@ -1,4 +1,5 @@
-function Plot_With_Stick_Pics(X, Y, Stick_Pics_X, Stick_Pics_Data_X, Stick_Pics_Data_Y, XTick_For_One_Stick_Pics, Stick_Pics_Width, Stick_Pics_Height, Stick_Pics_Legend_Labels)
+function Plot_With_Stick_Pics(X, Y, ...
+    Stick_Pics_X, Stick_Pics_Data_X, Stick_Pics_Data_Y, Stick_Pics_Legend_Labels, XTick_For_One_Stick_Pics, Stick_Pics_Width, Stick_Pics_Height)
 %CALL_FIGURE_NEW この関数の概要をここに記述
 %   詳細説明をここに記述
 
@@ -147,6 +148,9 @@ ax_Stick.Position(2) = (fig_tmp.Position(2) + fig_tmp.Position(4)) - ax_Stick.Po
 % スティックピクチャ用の座標の上端に主データ用の座標の上端が一致するように主データ用の座標の高さを設定
 ax_Data.Position(4) = ax_Stick.Position(2) - ax_Data.Position(2) - ax_Data.TightInset(4);
 %}
+
+% 主データの座標を最前面に
+axes(ax_Data)
 
 end
 
