@@ -27,6 +27,9 @@ for Subplot_Index = 1:Subplot_Num
     ax_Subplot_tmp.Color = 'none';
     
     ax_Subplot_tmp.XAxisLocation = XAxisLocation;
+    
+    % xlabelの設定などでずれているから，めいっぱい使うように設定しておく. 
+    ax_Subplot_tmp.OuterPosition([1,3]) = [0,1];
 
 end
 
@@ -123,6 +126,7 @@ xlabel(ax_BackGround, XLabel_Str);
 % もしスティックピクチャが主データの右端と左端に設定されているなら，スティックピクチャ用の座標が横いっぱいになるようにする
 % もしスティックピクチャの左端だけ飛び出すなら，主データの大きさをそのままに，主データの位置を動かす
 % もしスティックピクチャの右端だけ飛び出すなら，主データの大きさを少し縮小する.
+% どちらの端も飛び出さないなら，主データの大きさをギリギリに設定する
 if (ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0) && (ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1)
     
     ax_Subplot_Position_1 = -ax_Stick.XLim(1) / diff(ax_Stick.XLim);
@@ -158,6 +162,16 @@ elseif ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
     for Subplot_Index = 1:Subplot_Num
         ax_Subplot(Subplot_Index, 1).Position(1) = ax_Subplot_Position_1;
         ax_Subplot(Subplot_Index, 1).Position(3) = (1 - ax_Subplot(Subplot_Index, 1).Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
+    end
+else
+    ax_Subplot_Position_1 = -Inf;
+    for Subplot_Index = 1:Subplot_Num
+        ax_Subplot_Position_1 = max([ax_Subplot_Position_1, ax_Subplot(Subplot_Index, 1).OuterPosition(1) + ax_Subplot(Subplot_Index, 1).TightInset(1)]);
+    end
+    
+    for Subplot_Index = 1:Subplot_Num
+        ax_Subplot(Subplot_Index, 1).Position(1) = ax_Subplot_Position_1;
+        ax_Subplot(Subplot_Index, 1).Position(3) = 1 - ax_Subplot(Subplot_Index, 1).Position(1) - ax_BackGround.TightInset(3);
     end
 end
 

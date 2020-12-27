@@ -1,4 +1,4 @@
-function Plot_With_Stick_Pics(X, Y, ...
+function Plot_With_Stick_Pics(X, Y, XLabel_Str, YLabel_Str, Title_Str, Legend_Labels, ...
     Stick_Pics_X, Stick_Pics_Data_X, Stick_Pics_Data_Y, Stick_Pics_Legend_Labels, XTick_For_One_Stick_Pics, Stick_Pics_Width, Stick_Pics_Height)
 %CALL_FIGURE_NEW この関数の概要をここに記述
 %   詳細説明をここに記述
@@ -10,12 +10,18 @@ plot(X, Y)
 title('Sample')
 
 ax_Data = gca;
+xlabel(XLabel_Str)
+ylabel(YLabel_Str)
+title(Title_Str)
 
 % 上枠と右枠の削除
 ax_Data.Box = 'off';
 
 ax_Data.YGrid = 'on';
 ax_Data.XGrid = 'on';
+    
+% xlabelの設定などでずれているから，めいっぱい使うように設定しておく.
+ax_Data.OuterPosition([1,3]) = [0,1];
 
 % スティックピクチャ用の軸を作成
 ax_Stick = axes('Position', ax_Data.Position);
@@ -103,6 +109,7 @@ end
 % もしスティックピクチャが主データの右端と左端に設定されているなら，スティックピクチャ用の座標が横いっぱいになるようにする
 % もしスティックピクチャの左端だけ飛び出すなら，主データの大きさをそのままに，主データの位置を動かす
 % もしスティックピクチャの右端だけ飛び出すなら，主データの大きさを少し縮小する.
+% どちらの端も飛び出さないなら，主データの大きさをギリギリに設定する
 if (ax_Stick.XLim(1) / ax_Stick_XLim_Range < 0) && (ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1)
     ax_Data.Position(1) = max([-ax_Stick.XLim(1) / diff(ax_Stick.XLim), ...
         ax_Data.OuterPosition(1) + ax_Data.TightInset(1)]);
@@ -118,6 +125,11 @@ elseif ax_Stick.XLim(2) / ax_Stick_XLim_Range > 1
     ax_Data.Position(1) = ax_Data.OuterPosition(1) + ax_Data.TightInset(1);
     
     ax_Data.Position(3) = (1 - ax_Data.Position(1)) / (ax_Stick.XLim(2) / ax_Stick_XLim_Range);
+else
+    ax_Data.Position(1) = max([-ax_Stick.XLim(1) / diff(ax_Stick.XLim), ...
+        ax_Data.OuterPosition(1) + ax_Data.TightInset(1)]);
+    
+    ax_Data.Position(3) = 1 - ax_Data.Position(1) - ax_Data.TightInset(3);
 end
 
 % x軸，y軸のデータを同じ長さで表示する．例えば円がちゃんと円として表示されるようになる
@@ -169,6 +181,7 @@ ax_Data.Position(4) = ax_Stick.Position(2) - ax_Data.Position(2) - ax_Data.Tight
 
 % 主データの座標を最前面に
 axes(ax_Data)
+legend(ax_Data, Legend_Labels, 'Location', 'best')
 
 end
 
