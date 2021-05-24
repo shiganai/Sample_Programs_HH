@@ -7,3 +7,5 @@
 *.pptx
 *.jpg
 *.docx
+*.fig
+*/codegen/
